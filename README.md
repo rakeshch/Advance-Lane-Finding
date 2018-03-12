@@ -31,15 +31,13 @@ You're reading it!
 
 The code for this step is contained in the first code cell of the IPython notebook located in "./project.ipynb".  
 
-The OpenCV functions findChessboardCorners() and drawChessboardCorners() were used to automatically find and draw corners in an image of a chessboard pattern, and are backbone for this image calibration. 
+The OpenCV functions findChessboardCorners() and calibrateCamera() were used to automatically find and draw corners in an image of a chessboard pattern, and are backbone for this image calibration. 
 
-The findChessboardCorners function attempts to determine whether the input image is a view of the chessboard pattern and locate the internal chessboard corners. Here in this project, the input comprise of a number of chessboard images ( 9 x 6 squares used in this project, points where two black and two white squares intersect) taken from different angles, using the same camera. The findChessboardCorners function returns a non-zero value if all of the corners are found and they are placed in a certain order. Otherwise, if the function fails to finds all the corners or reorder them, it returns 0. Once an array of detected corners are found, drawChessboardCorners can be used to render the detected chessboard corners as shown below.
+The findChessboardCorners() attempts to determine whether the input image is a view of the chessboard pattern and locate the internal chessboard corners. Here in this project, the input comprise of a number of chessboard images ( 9 x 6 squares used in this project, points where two black and two white squares intersect) taken from different angles, using the same camera. The findChessboardCorners() returns a non-zero value if all of the corners are found and they are placed in a certain order. Otherwise, if the function fails to finds all the corners or reorder them, it returns 0. Once an array of detected corners are found, drawChessboardCorners() can be used to render the detected chessboard corners as shown below.
 
 ![Screenshot](.\output_images\calibration3.JPG)
 
-I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
-
-I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
+Once an arrays of object points, corresponding to the internal corners of a chessboard, and image points, the pixel locations of the internal chessboard corners are found using findChessboardCorners(), can be fed to calibrateCamera() which returns camera calibration and distortion coefficients. These can then be used by the OpenCV undistort() to undo the effects of distortion on any image produced by the same camera. 
 
 ![alt text][image1]
 
