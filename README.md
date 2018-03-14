@@ -2,7 +2,7 @@
 
 In this project, the goal is to write a software pipeline to identify the lane boundaries in a video.
 
-The goals / steps of this project are the following:
+The steps of this project are the following:
 
 * Compute the camera calibration matrix and distortion coefficients given a set of chessboard images.
 * Apply a distortion correction to raw images.
@@ -33,9 +33,9 @@ The code for this step is contained in the first code cell of the IPython notebo
 
 The OpenCV functions findChessboardCorners() and calibrateCamera() were used to automatically find and draw corners in an image of a chessboard pattern, and are backbone for this image calibration. 
 
-The findChessboardCorners() attempts to determine whether the input image is a view of the chessboard pattern and locate the internal chessboard corners. Here in this project, the input comprise of a number of chessboard images ( 9 x 6 squares used in this project, points where two black and two white squares intersect) taken from different angles, using the same camera. The findChessboardCorners() returns a non-zero value if all of the corners are found and they are placed in a certain order. Otherwise, if the function fails to finds all the corners or reorder them, it returns 0. Once an array of detected corners are found, drawChessboardCorners() can be used to render the detected chessboard corners as shown below.
+The findChessboardCorners() attempts to determine whether the input image is a view of the chessboard pattern and locate the internal chessboard corners. Here in this project, the input comprise of a number of chessboard images ( 9 x 6 squares used in this project, points where two black and two white squares intersect) taken from different angles, using the same camera. The findChessboardCorners() returns a non-zero value if all of the corners are found and they are placed in a certain order. Otherwise, if the function fails to finds all the corners or reorder them, it returns 0, which can be noticed in the below image where corners were not detected in 3 of the fed inputs. Once an array of detected corners are found, drawChessboardCorners() can be used to render the detected chessboard corners as shown below.
 
-![Screenshot](.\output_images\calibration3.JPG)
+![Screenshot](./output_images/all_chessboards.JPG)
 
 Once an arrays of object points, corresponding to the internal corners of a chessboard, and image points, the pixel locations of the internal chessboard corners are found using findChessboardCorners(), can be fed to calibrateCamera() which returns camera calibration and distortion coefficients. These can then be used by the OpenCV undistort() to undo the effects of distortion on any image produced by the same camera. 
 
