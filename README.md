@@ -37,52 +37,46 @@ The findChessboardCorners() attempts to determine whether the input image is a v
 
 ![Screenshot](./output_images/all_chessboards.JPG)
 
-Once an arrays of object points, corresponding to the internal corners of a chessboard, and image points, the pixel locations of the internal chessboard corners are found using findChessboardCorners(), can be fed to calibrateCamera() which returns camera calibration and distortion coefficients. These can then be used by the OpenCV undistort() to undo the effects of distortion on any image produced by the same camera. 
+Once an arrays of object points, corresponding to the internal corners of a chessboard, and image points, the pixel locations of the internal chessboard corners are found using findChessboardCorners(), can be fed to calibrateCamera() which returns camera calibration and distortion coefficients. These can then be used by the OpenCV undistort() to undo the effects of distortion on any image produced by the same camera. Example shown below.
 
-![alt text][image1]
+![Screenshot](./output_images/undistort_chessboard.JPG)
 
 ### Pipeline (single images)
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
-![alt text][image2]
+Distortion correction applied to some of the test images can be seen below. Changes can be noticed between original image (on left) and undistorted images (on right) when looking at the car hood.
+
+![Screenshot](./output_images/undistorted_roads.JPG)
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+I started with HLS color space with an approach of identifying yellow lines and white lines using HLS s,h channel and l channel. To detect all the lines properly I tried to see how several combinations of hls color thresholds with x, y, xy gradients looks like. At some point, I was able to detect the yellow and white lines sucessfully under balanced light conditions, but this combination still fails when there are shadows in images and when the images are bright. Code for this is titled 'Working with HLS color space' in project.ipynb file. One example can be seen below.
 
-![alt text][image3]
+![Screenshot](./output_images/project_thresholds.JPG)
+
+After reading some papers on shadow detection (one refernce [here](./references/shadow_detection.pdf)) I started wworking with LAB color space. I started with B channel to detect yellow color and L channel to find white lines. By combining B and L channel thresholds I was able to successfully detect the shadows. Rather than working on removing shadows, I used LAB B channel threshold in combination with HLS L channel threshold to generate a binary image that detects yellow and white lines successully. I then applied normalization to LAB B channel (only when yellow is found) and HLS L channel. These can be seen in lab_b_threshold() and hls_l_threshold() in my project.ipynb file. Code for this is titled 'Working with LAB B channel and HLS L channel' in project.ipynb file.One example can be seen below.
+
+![Screenshot](./output_images/combined_lab.JPG)
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The code for perspective transform is titled 'Perspective transform' in project.ipynb file.  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose to hardcode the source and destination points in the following manner:
 
 ```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
+src = np.float32([(135,imshape[0]),
+                   (580, 460), 
+                   (730, 460), 
+                   (1200,imshape[0])])
+dst = np.float32([(320,720),
+                  (920,720),
+                  (320,0),
+                  (920,0)])
 ```
 
-This resulted in the following source and destination points:
+I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image. Images below demonstrate the results of the perspecive transform.
 
-| Source        | Destination   | 
-|:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
-
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
-
-![alt text][image4]
+![Screenshot](./output_images/warped.JPG)
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
