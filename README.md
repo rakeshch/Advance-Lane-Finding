@@ -84,12 +84,12 @@ Once we have the binary image after applying calibration, thresholding and a per
 
 `blind_search()` computes a histogram of the lower half of the image and finds the bottom-most x position of the left and right lane lines. In my thresholded binary image, pixels are either 0 or 1, so the two most prominent peaks in this histogram will be good indicators of the x-position of the base of the lane lines. Originally these locations were identified from the local maxima of the left and right halves of the histogram, but in my final approach I have changed these to quarters of the histogram just left and right of the midpoint. This helped to reject any lines from adjacent lanes. The function then identifies nine windows from which to identify lane pixels, each one centered on the midpoint of the pixels from the window below. This effectively follows the lane lines up to the top of the binary image, and speeds processing by only searching for activated pixels over a small portion of the image. Pixels belonging to each lane line are identified and the Numpy polyfit() fits a second order polynomial to each set of pixels. Image below demonstrates the results.
 
-![Screenshot](./output_images/sliding_window.JPG)
+![Screenshot](./output_images/sliding_window.PNG)
 
 Once I know where the lines are I have a fit! In the next frame of video I don't need to do a blind search again, but instead I can just search in a margin around the previous line position using `quick_lane_finder()`, labeled as "Fit a Polynomial using previous fits".
 Below image demonstrates the result, with the green shaded area is the range from the previous fit, and the yellow lines are from the current image.
 
-![Screenshot](./output_images/poly_fit.JPG)
+![Screenshot](./output_images/poly_fit.PNG)
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
@@ -115,11 +115,11 @@ left_fitx and right_fitx are the x-intercepts of the left and right fits, respec
 
 This is labelled as 'Draw the measurement back down onto the road' in my project.ipynb file. A polygon is generated based on plots of the left and right fits, warped back to the perspective of the original image using the inverse perspective matrix Minv and overlaid onto the original image. 
 
-![Screenshot](./output_images/final_img.JPG)
+![Screenshot](./output_images/final_img.PNG)
 
 The image below demonstrates final ouput after going throught the complete pipeline and can be seen under "Final pipeline" in my project/ipynb file.
 
-![Screenshot](./output_images/final_with_subplots.JPG)
+![Screenshot](./output_images/final_with_subplots.PNG)
 
 ---
 
