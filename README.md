@@ -53,7 +53,7 @@ Distortion correction applied to some of the test images can be seen below. Chan
 
 I started with HLS color space with an approach of identifying yellow lines and white lines using HLS s,h channel and l channel. To detect all the lines properly I tried to see how several combinations of hls color thresholds with x, y, xy gradients looks like. At some point, I was able to detect the yellow and white lines sucessfully under balanced light conditions, but this combination still fails when there are shadows in images and when the images are bright. Code for this is titled 'Working with HLS color space' in project.ipynb file. One example can be seen below.
 
-![Screenshot](./output_images/project_thresholds.JPG)
+![Screenshot](./output_images/combned_hls.JPG)
 
 After reading some papers on shadow detection (one reference [here](./references/shadow%20detection.pdf)) I started working with LAB color space. I started with B channel to detect yellow color and L channel to find white lines. By combining B and L channel thresholds I was able to successfully detect the shadows. Rather than working on removing shadows, I used LAB B channel threshold in combination with HLS L channel threshold to generate a binary image that detects yellow and white lines successully. I then applied normalization to LAB B channel (only when yellow is found) and HLS L channel. These can be seen in lab_b_threshold() and hls_l_threshold() in my project.ipynb file. Code for this is titled 'Working with LAB B channel and HLS L channel' in project.ipynb file.One example can be seen below.
 
