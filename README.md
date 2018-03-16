@@ -93,7 +93,7 @@ Below image demonstrates the result, with the green shaded area is the range fro
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-The radius of curvature is calculated based on the [reference](https://www.intmath.com/applications-differentiation/8-radius-curvature.php) and is labelled as "Radius of Curvature" in my project file.
+The radius of curvature is calculated based on the [reference](https://www.intmath.com/applications-differentiation/8-radius-curvature.php) and is labeled as "Radius of Curvature" in my project file.
 
 The pixel values of the lane are scaled into meters using the scaling factors defined as follows:
 
@@ -113,7 +113,7 @@ left_fitx and right_fitx are the x-intercepts of the left and right fits, respec
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-This is labelled as 'Draw the measurement back down onto the road' in my project.ipynb file. A polygon is generated based on plots of the left and right fits, warped back to the perspective of the original image using the inverse perspective matrix Minv and overlaid onto the original image. 
+This is labeled as 'Draw the measurement back down onto the road' in my project.ipynb file. A polygon is generated based on plots of the left and right fits, warped back to the perspective of the original image using the inverse perspective matrix Minv and overlaid onto the original image. 
 
 ![Screenshot](./output_images/final_img.PNG)
 
@@ -127,7 +127,7 @@ The image below demonstrates final ouput after going throught the complete pipel
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video_output.mp4)
+Here's a [link to my video result](./project_video_output.mp4) or on [youtube](https://youtu.be/ZVN2vVVca3A)
 
 Here's a [link to my challenge video result](./challenge_video_output.mp4)
 
@@ -140,5 +140,7 @@ The lanes in the challenge video still need some tuning for initial few seconds 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 Most of the problems I encountered were due to lighting conditions, shadows, etc. It took me some time to get the proper combination of thresholds parameters to get the pipeline to perform well on the original project video but still see a lot of issues with challenge video. But after using LAB channel, particularly after discovering the B channel of the LAB colorspace, which isolates the yellow lines very well, even on the lighter-gray bridge sections that comprised the most difficult sections of the video, the pipeline does perform better on project video and with some issues in challenge video. The lane lines don't necessarily occupy the same pixel value (speaking of the L channel of the HLS color space) range on this video that they occupy on the first video, so the normalization/scaling technique helped here quite a bit, although it also tended to create problems (large noisy areas activated in the binary image) when the white lines didn't contrast with the rest of the image enough. This would be an issue in snow or in a situation where, for example, a bright white car were driving among dull white lane lines. Producing a pipeline from which lane lines can reliably be identified was of utmost importance, but smoothing the video output by averaging the last n found good fits also helped (implemented in save_fit() in project.ipynb file). My approach also invalidates fits if the left and right base points aren't a certain distance apart (within some tolerance) under the assumption that the lane width will remain relatively constant.
+
+Further tuning is required to make the pipeline robust. Some references were added in references folder of this repository that need to be tried out in detecting lane lines in real time. Once fine tuned, the pipeline should be able to perform well on challenge video and harder challenge video.
 
 
