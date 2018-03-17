@@ -97,15 +97,15 @@ The radius of curvature is calculated based on the [reference](https://www.intma
 
 The pixel values of the lane are scaled into meters using the scaling factors defined as follows:
 
-ym_per_pix = 30/720 # meters per pixel in y dimension
-xm_per_pix = 3.7/700 # meteres per pixel in x dimension
+ym_per_pix = 3.048/100 # meters per pixel in y dimension
+xm_per_pix = 3.7/510 # meters per pixel in x dimension
 
 These values are then used to compute the polynomial coefficients in meters and then the formula given in the lectures is used to compute the radius of curvature.
 
 The camera is assumed to be centered in the vehicle and checks how far the midpoint of the two lanes is from the center of the image.
 
 lane_center = (left_fitx[719] + right_fitx[719])/2
-xm_per_pix = 3.7/700 # meters per pixel in x dimension
+xm_per_pix = 3.7/500 # meters per pixel in x dimension
 center_offset_pixels = abs(binary_warped.shape[1]/2 - lane_center)
 center_offset_mtrs = xm_per_pix*center_offset_pixels
 
@@ -141,6 +141,6 @@ The lanes in the challenge video still need some tuning for initial few seconds 
 
 Most of the problems I encountered were due to lighting conditions, shadows, etc. It took me some time to get the proper combination of thresholds parameters to get the pipeline to perform well on the original project video but still see a lot of issues with challenge video. But after using LAB channel, particularly after discovering the B channel of the LAB colorspace, which isolates the yellow lines very well, even on the lighter-gray bridge sections that comprised the most difficult sections of the video, the pipeline does perform better on project video and with some issues in challenge video. The lane lines don't necessarily occupy the same pixel value (speaking of the L channel of the HLS color space) range on this video that they occupy on the first video, so the normalization/scaling technique helped here quite a bit, although it also tended to create problems (large noisy areas activated in the binary image) when the white lines didn't contrast with the rest of the image enough. This would be an issue in snow or in a situation where, for example, a bright white car were driving among dull white lane lines. Producing a pipeline from which lane lines can reliably be identified was of utmost importance, but smoothing the video output by averaging the last n found good fits also helped (implemented in save_fit() in project.ipynb file). My approach also invalidates fits if the left and right base points aren't a certain distance apart (within some tolerance) under the assumption that the lane width will remain relatively constant.
 
-Further tuning is required to make the pipeline robust. Some references were added in references folder of this repository that need to be tried out in detecting lane lines in real time. Once fine tuned, the pipeline should be able to perform well on challenge video and harder challenge video.
+Further tuning is required to make the pipeline robust. Some references were added in references folder of this repository, that need to be tried out in detecting lane lines more accurately. 
 
 
