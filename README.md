@@ -1,8 +1,8 @@
 ## Advanced Lane Finding
 
-In this project, the goal is to write a software pipeline to identify the lane boundaries in a video.
+In this project, we apply computer vision techniques to augment video output with a detected road lane, road radius of curvature and road centre offset. The video was captured using the middle camera of the car and provided by Udacity.
 
-The steps of this project are the following:
+The goal/ steps of this project are the following:
 
 * Compute the camera calibration matrix and distortion coefficients given a set of chessboard images.
 * Apply a distortion correction to raw images.
